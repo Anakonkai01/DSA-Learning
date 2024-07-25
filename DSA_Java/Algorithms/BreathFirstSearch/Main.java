@@ -13,8 +13,8 @@ import java.util.HashMap;
 public class Main {
     public static boolean BreathFirstSearch(String person){
         Queue<String> queue = new LinkedList<>();
-        Map<String, ArrayList> neightbor = new HashMap<>();
-        neightbor.put("you", "Alice");
+        // Map<String, ArrayList> neightbor = new HashMap<>();
+        // neightbor.put("you", "Alice");
 
         return false;
     }

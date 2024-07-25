@@ -58,6 +58,22 @@ public class BinaryTree {
         System.out.println();
     }
 
+    public static void levelOrderTraversal(TreeNode root) {
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root); // add the root to the queue
+        while (!queue.isEmpty()) {
+            // take the first one out;
+            TreeNode tempNode = queue.poll();
+            System.out.print(tempNode.val + " ");
+
+            if (tempNode.left != null)
+                queue.offer(tempNode.left);
+            if (tempNode.right != null)
+                queue.offer(tempNode.right);
+        }
+        System.out.println();
+    }
+
     // =)) nhuc dau ve lo
     public static void preorderTraversal(Node root) { // root -> left -> right
         if (root == null)
@@ -141,9 +157,30 @@ public class BinaryTree {
         return node;
     }
 
-    // public static int maxDepth(TreeNode root) {
+    public static int maxDepth(Node root) { // cần cải thiện vì mỗi độ rộng của mỗi tầng = chính size của queue
+        if(root == null) return 0;
 
-    // }
+        int maxLength = 0;
+
+        Queue<Node> queue = new LinkedList<>();
+        Queue<Node> nextQueue = new LinkedList<>();
+        queue.offer(root);
+
+        while (!queue.isEmpty()) {
+            while(!queue.isEmpty()){
+                Node temp = queue.poll();
+                // System.out.print(temp.data+" ");
+                if(temp.left != null) nextQueue.offer(temp.left);
+                if(temp.right != null) nextQueue.offer(temp.right);
+            }
+            // System.out.println();
+            maxLength++;
+            queue.addAll(nextQueue);
+            nextQueue.clear();
+        }
+
+        return maxLength;
+    }
 
     public static void main(String[] args) {
         Node root = null;
@@ -165,6 +202,7 @@ public class BinaryTree {
         root = insert(root, 16);
 
         System.out.println(breathFirstTraversal(root, 1100));
-        levelOrderTraversal(inverseTreeNode_Loop(root));
+        // levelOrderTraversal(inverseTreeNode_Loop(Node));
+        System.out.println(maxDepth(root));
     }
 }
