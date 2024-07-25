@@ -1,5 +1,5 @@
-
-
+import java.util.HashMap;
+import java.util.Map;
 
 class Node {
     int val;
@@ -208,17 +208,28 @@ public class SingleLinkedList {
     }
 
     public static Node copyRandomList(Node head){
-        Node dummy = new Node(0);
-        Node tempDummy = dummy;
-        Node temp = head;
-        while(temp != null){
-            Node newNode = new Node(temp.val);
-            // Node newNodeRandom = new Node()
-            tempDummy.next = newNode;
-            tempDummy = tempDummy.next;
-            temp = temp.next;
+        Map<Node, Node> map = new HashMap<>();
+
+        // cho null vao dau de phong tranh truong hop random va next tro den null
+        map.put(null,null);
+
+        Node curr = head;
+        while(curr != null){
+            Node newNode = new Node(curr.val);
+            map.put(curr,newNode);
+            curr = curr.next;
         }
-        return dummy.next;
+        
+            
+        curr = head;
+        while(curr != null){
+            Node copy = map.get(curr); // lay ban sao cai node do ra, chu ko co tao moi node nao ca
+            copy.next = map.get(curr.next); // lay next thuoc cai ban goc roi lien ket cho ban sao next
+            copy.random = map.get(curr.random); // tuong tu nhu tren 
+            curr = curr.next;
+        }
+
+        return map.get(head); // tra ve ban sao dau tien trong danh sach
     }
 
     public static void main(String[] args) {
