@@ -1,14 +1,14 @@
 package DSA_Java.DataStructure.Tree;
 
 public class TreeNode {
-    int val;
+    Integer val;
     TreeNode left;
     TreeNode right;
 
-    TreeNode() {
+    public TreeNode() {
     }
 
-    TreeNode(int val) {
+    public TreeNode(Integer val) {
         this.val = val;
     }
 
@@ -17,4 +17,6 @@ public class TreeNode {
         this.left = left;
         this.right = right;
     }
+
+    
 }

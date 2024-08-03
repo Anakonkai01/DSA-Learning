@@ -1,10 +1,11 @@
 package DSA_Java.DataStructure.Tree;
 
-import java.util.HashMap;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
-
-import javax.management.QueryEval;
 
 // Thuật toán chèn một nút vào Cây nhị phân:
 // Kiểm tra xem có nút nào trong cây nhị phân bị thiếu con trái hay không. Nếu một nút như vậy tồn tại thì hãy chèn nút mới làm nút con bên trái của nó.
@@ -45,7 +46,7 @@ public class BinaryTree {
         return root;
     }
 
-    public static TreeNode insert(TreeNode root, int data) {
+    public static TreeNode insert(TreeNode root, Integer data) {
         // check if the tree is empty, then newNode is the root
         if (root == null) {
             root = new TreeNode(data);
@@ -196,11 +197,12 @@ public class BinaryTree {
         return node;
     }
 
-    public static int maxDepth_DFS(TreeNode root){
-        if(root == null) return 0;
+    public static int maxDepth_DFS(TreeNode root) {
+        if (root == null)
+            return 0;
         int left = 1 + maxDepth_DFS(root.left);
         int right = 1 + maxDepth_DFS(root.right);
-        return Math.max(left,right);
+        return Math.max(left, right);
     }
 
     public static int maxDepth_BFS(Node root) { // cần cải thiện vì mỗi độ rộng của mỗi tầng = chính size của queue
@@ -327,40 +329,44 @@ public class BinaryTree {
         return check[0];
     }
 
-    public static int check_balance_DFS(TreeNode root,boolean[] check){
-        if( root == null) return 0;
+    public static int check_balance_DFS(TreeNode root, boolean[] check) {
+        if (root == null)
+            return 0;
         int left = 1 + check_balance_DFS(root.left, check);
         int right = 1 + check_balance_DFS(root.right, check);
-        if(Math.abs(left - right) > 1) check[0] = false;
-        return Math.max(left,right);
+        if (Math.abs(left - right) > 1)
+            check[0] = false;
+        return Math.max(left, right);
     }
 
-
-    public static boolean isSameTree_DFS(TreeNode p, TreeNode q){
+    public static boolean isSameTree_DFS(TreeNode p, TreeNode q) {
         // dung DFS
-        if(p == null && q == null){
+        if (p == null && q == null) {
             return true;
-        }
-        else if(p != null && q != null && q.val == p.val){
+        } else if (p != null && q != null && q.val == p.val) {
             return isSameTree_DFS(p.left, q.left) && isSameTree_DFS(p.right, q.right);
         }
         return false;
     }
 
-    public static boolean isSameTree_BFS(TreeNode p, TreeNode q){
-        if(p == null && q == null) return true;
+    public static boolean isSameTree_BFS(TreeNode p, TreeNode q) {
+        if (p == null && q == null)
+            return true;
         Queue<TreeNode> queue1 = new LinkedList<>();
         Queue<TreeNode> queue2 = new LinkedList<>();
         queue1.offer(p);
         queue2.offer(q);
 
-        while(!queue1.isEmpty() && !queue2.isEmpty()){
+        while (!queue1.isEmpty() && !queue2.isEmpty()) {
             TreeNode temp1 = queue1.poll();
             TreeNode temp2 = queue2.poll();
-            if(temp1 == null && temp2 != null) return false;
-            if(temp2 == null && temp1 != null) return false;
-            if(temp1 != null && temp2 != null){
-                if(temp1.val != temp2.val) return false;
+            if (temp1 == null && temp2 != null)
+                return false;
+            if (temp2 == null && temp1 != null)
+                return false;
+            if (temp1 != null && temp2 != null) {
+                if (temp1.val != temp2.val)
+                    return false;
                 queue1.offer(temp1.left);
                 queue1.offer(temp1.right);
                 queue2.offer(temp2.left);
@@ -368,12 +374,154 @@ public class BinaryTree {
             }
         }
         return true;
-        
     }
-    public static void main(String[] args) {
-        TreeNode root1 = null;
-        TreeNode root2 = null;
 
+    public static boolean isSubtree(TreeNode root, TreeNode subRoot) {
+        if (root == null)
+            return subRoot == null;
+        return isSameTree(root, subRoot) || isSubtree(root.left, subRoot) || isSubtree(root.right, subRoot);
+    }
+
+    private static boolean isSameTree(TreeNode p, TreeNode q) {
+        if (p == null && q == null)
+            return true;
+        if (p == null || q == null)
+            return false;
+        return p.val == q.val && isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+    }
+
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        if (root == null)
+            return null;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        List<List<Integer>> list1 = new ArrayList<>();
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            List<Integer> list2 = new ArrayList<>();
+            for (int i = 0; i < size; i++) {
+                TreeNode temp = queue.poll();
+                list2.add(temp.val);
+                if (temp.left != null)
+                    queue.offer(temp.left);
+                if (temp.right != null)
+                    queue.offer(temp.right);
+            }
+            list1.add(list2);
+        }
+        return list1;
+    }
+
+    public static List<Integer> rightSideView(TreeNode root) {
+        List<Integer> list1 = new ArrayList<>();
+        if (root == null)
+            return list1;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                TreeNode temp = queue.poll();
+                if (i == size - 1) {
+                    list1.add(temp.val);
+                }
+                System.out.print(temp.val + " ");
+                if (temp.left != null)
+                    queue.offer(temp.left);
+                if (temp.right != null)
+                    queue.offer(temp.right);
+            }
+            System.out.println();
+        }
+        return list1;
+    }
+
+    public static int goodNodes(TreeNode root) {
+
+        return DFS_goodNodes(root, root.val);
+    }
+
+    private static int DFS_goodNodes(TreeNode root, int maxVal) {
+        if (root == null)
+            return 0;
+        int res = (root.val > maxVal)? 1 : 0;
+        maxVal = Math.max(root.val,maxVal);
+        res += DFS_goodNodes(root.left, maxVal);
+        res += DFS_goodNodes(root.right, maxVal);
+        return res;
+    }
+
+    // not me, the code belongs to neetcode
+    public static boolean isValidBST(TreeNode root) {
+        return DFS_isValidBST(root,Double.NEGATIVE_INFINITY,Double.POSITIVE_INFINITY);
+    }
+
+    private static boolean DFS_isValidBST(TreeNode root, double leftVal, double rightVal){
+        if(root == null) return true;
         
+        if(!(leftVal < root.val && root.val < rightVal)){
+            return false;
+        }
+        return DFS_isValidBST(root.left, leftVal, root.val) && DFS_isValidBST(root.right, root.val, rightVal);
+    }
+
+    public static int kthSmallest(TreeNode root, int k) {
+        if(root == null) return 0;
+        int[] count = new int[1];
+        int[] res = new int[1];
+        DFS_KthSmallest(root, count,res,k);
+        return res[0];
+    }
+    
+    public static void DFS_KthSmallest(TreeNode root, int[] count, int[] res, int k){
+        if(root == null) return ;
+        DFS_KthSmallest(root.left, count,res, k);
+        if(count[0] == k){
+            res[0] = root.val;
+        }
+        count[0]++;
+        DFS_KthSmallest(root.right, count, res, k);
+    }
+
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        if(preorder.length == 0 || inorder.length == 0) return null;
+        
+        TreeNode root = new TreeNode(preorder[0]);
+
+        int mid = -1;
+        for(int i = 0; i < inorder.length; i++){
+            if(preorder[0] == inorder[i]){
+                mid = i;
+                break;
+            }
+        }
+
+        int[] leftPreOrder = Arrays.copyOfRange(preorder, mid + 1, preorder.length);
+        int[] leftInOrder = Arrays.copyOfRange(inorder, 0, mid);
+        root.left = buildTree(leftPreOrder, leftInOrder);
+
+        int[] rightPreOrder = Arrays.copyOfRange(preorder, mid + 1, preorder.length);
+        int[] rightInOrder = Arrays.copyOfRange(inorder, mid + 1, inorder.length);
+        root.right = buildTree(rightPreOrder, rightInOrder);
+        return root;
+    }
+
+
+    public static void main(String[] args) {
+        // Node root1 = null;
+        // // TreeNode root2 = null;
+        // root1 = insert(root1, 1);
+        // root1 = insert(root1, 2);
+        // root1 = insert(root1, 3);
+        // root1 = insert(root1, 4);
+        // root1 = insert(root1, 5);
+        // root1 = insert(root1, 6);
+        // root1 = insert(root1, 7);
+        // root1 = insert(root1, 8);
+        // preorderTraversal(root1);
+        // System.out.println();
+        // inorderTraversal(root1);
+
+        // TreeNode root = 
     }
 }
